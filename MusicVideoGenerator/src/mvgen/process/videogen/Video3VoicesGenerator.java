@@ -16,8 +16,6 @@ public class Video3VoicesGenerator extends VideoGenerator{
 
 		this.createVideoMaker();
 
-		//Random generator = new Random();
-
 		int x = imageSize.width / 2;
 		int y = imageSize.height / 2;
 		
