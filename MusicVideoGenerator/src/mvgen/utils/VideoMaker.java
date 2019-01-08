@@ -17,7 +17,7 @@ public class VideoMaker {
 
 	public void createVideoWriter(int frameRate, Dimension imagesSize)
 	{
-		writer = ToolFactory.makeWriter("E:/Vidéos/video.mp4");
+		writer = ToolFactory.makeWriter("Generated/video.mp4");
 		
 		writer.addVideoStream(0, 0, ICodec.ID.CODEC_ID_MPEG4, imagesSize.width, imagesSize.height);
 		

@@ -49,7 +49,7 @@ public class Fenetre extends JFrame{
 		System.out.println("lancement !");
 		//go();
 	}
-
+/*
 	private void go()
 	{
 		while(true)
@@ -63,7 +63,7 @@ public class Fenetre extends JFrame{
 			}
 		}
 	}
-	
+	*/
 	public void setData(List<Double> data)
 	{
 		grapher.data = new ArrayList<>(data);

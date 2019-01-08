@@ -25,7 +25,7 @@ public class AudioSample {
 		return rawFFT[indexToLookFor];
 	}
 	
-	protected double getFromTo(int fmin, int fmax)
+	public double getFromTo(int fmin, int fmax)
 	{
 		double amplitude = 0;
 
@@ -37,17 +37,17 @@ public class AudioSample {
 		return amplitude;
 	}
 	
-	public double getBass() // 0 -> 200Hz
+	public double getBass() // 0 -> 500Hz
 	{
 		return getFromTo(50,500);
 	}
 	
-	public double getMid() // 200 -> 1kHz
+	public double getMid() // 500 -> 3kHz
 	{
 		return getFromTo(500, 3000);
 	}
 	
-	public double getHigh() // 1kHz -> 22kHz
+	public double getHigh() // 3kHz -> 22kHz
 	{
 		return getFromTo(3000, 22000);
 	}

@@ -29,8 +29,6 @@ public class Grapher extends JPanel{
 		
 		Point lastPoint = null;
 		
-		int c = 0;
-		
 		for(int i = 0; i < this.data.size(); i++)
 		{
 			int current = (int)(this.data.get(i) * signalMaxSize);

@@ -31,6 +31,8 @@ public class AudioReader {
 			int frameIndex = 0;
 			
 			double[] samples = new double[Fe];
+			
+			System.out.println("Starting music file Read...");
 
 			while(wav.isReadable())
 			{
@@ -62,6 +64,8 @@ public class AudioReader {
 			e.printStackTrace();
 			return null;
 		}
+		
+		System.out.println("Music read");
 		
 		return data;
 	}
