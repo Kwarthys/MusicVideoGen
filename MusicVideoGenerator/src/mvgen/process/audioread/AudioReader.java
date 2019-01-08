@@ -15,19 +15,25 @@ public class AudioReader {
 
 	int FRAME_RATE = 50;
 
-	private static double[] window = buildFrame(882 * 2);
+	private static double[] window = buildFrameMask(882 * 2);
 
-	private static double[] buildFrame(int size)
+	private static double[] buildFrameMask(int size)
 	{
 		double[] window = new double[size];
+
+		double inc = -4.0/size;
 		
-		for (int i = 0; i<size/4; ++i)
+		int i;
+		for (i=0; i<size/4; ++i)
 		{
-			window[i] = i*(4/size);
-			window[size-1-i] = i*(4/size); 
+			double val = 1-inc*(i/10-size/4);
+			window[i] = val;
+			window[size-1-i] = val;
+
+			inc = 4*(val-1)/size;
 		}
 
-		for (int i=size/4; i<size/2; ++i)
+		for(i=size/4; i<size/2; ++i)
 		{
 			window[i] = 1;
 			window[size-1-i] = 1; 
@@ -51,8 +57,8 @@ public class AudioReader {
 
 			int frameIndexA = Fe;
 			int frameIndexB = 0;
-			double[] samplesA = new double[2*Fe];
-			double[] samplesB = new double[2*Fe];
+			double[] samplesA = new double[4*Fe];
+			double[] samplesB = new double[4*Fe];
 
 			System.out.println("Starting music file Read...");
 
@@ -69,7 +75,7 @@ public class AudioReader {
 
 						data.add(new AudioSample(fftMaker.getFullFtt()));
 
-						samplesA = new double[2*Fe];						
+						samplesA = new double[4*Fe];						
 					}			
 					if(frameIndexB == 2*Fe)
 					{
@@ -78,7 +84,7 @@ public class AudioReader {
 
 						data.add(new AudioSample(fftMaker.getFullFtt()));
 
-						samplesB = new double[2*Fe];						
+						samplesB = new double[4*Fe];						
 					}
 
 					samplesA[frameIndexA] = array[i] * window[frameIndexA];
@@ -90,7 +96,6 @@ public class AudioReader {
 			}
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
@@ -155,7 +160,6 @@ public class AudioReader {
 			return data;
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}

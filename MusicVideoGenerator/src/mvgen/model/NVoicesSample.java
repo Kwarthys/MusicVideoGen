@@ -8,42 +8,41 @@ public class NVoicesSample {
 	protected int sampleSize;
 
 	protected double[] amplitudes;
+	
+	protected static double[] fill10Amps(AudioSample data)
+	{
+		double[] amplitudes = new double[10];
+		amplitudes[0] = data.getFromTo(50, 100);
+		amplitudes[1] = data.getFromTo(100, 200);
+		amplitudes[2] = data.getFromTo(200, 400);
+		amplitudes[3] = data.getFromTo(400, 800);
+		amplitudes[4] = data.getFromTo(800, 1600);
+		amplitudes[5] = data.getFromTo(1600, 3200);
+		amplitudes[6] = data.getFromTo(3200, 6400);
+		amplitudes[7] = data.getFromTo(6400, 12800);
+		amplitudes[8] = data.getFromTo(12800, 17000);
+		amplitudes[9] = data.getFromTo(17000, 22000);
+		
+		return amplitudes;
+	}
 
 	/** THIS IS TEMPORARY, I DO NOT MASTER THE MATHS BEHIND THAT BLACK AUDIO MAGIC AND REQUIRE A WIZZARD **/
 	public NVoicesSample(AudioSample data, int size)
 	{
+		this.amplitudes = new double[size];
+		this.sampleSize = size;
 		
-		//Music is logarithmic
-		//i want size bands of equal logarithmic size
+		int margin = 4;
 		
-		sampleSize = 10;
-		this.amplitudes = new double[sampleSize];
-		this.amplitudes[0] = data.getFromTo(50, 100);
-		this.amplitudes[1] = data.getFromTo(100, 200);
-		this.amplitudes[2] = data.getFromTo(200, 400);
-		this.amplitudes[3] = data.getFromTo(400, 800);
-		this.amplitudes[4] = data.getFromTo(800, 1600);
-		this.amplitudes[5] = data.getFromTo(1600, 3200);
-		this.amplitudes[6] = data.getFromTo(3200, 6400);
-		this.amplitudes[7] = data.getFromTo(6400, 12800);
-		this.amplitudes[8] = data.getFromTo(12800, 17000);
-		this.amplitudes[9] = data.getFromTo(17000, 22000);
-		
-		/*
-		
-		int lastCut = 0;
-		double step = Math.pow(22000.0, 1.0/sampleSize);	
-		for(int i = 1; i < sampleSize; i++)
+		double step = Math.pow(22000.0, 1.0/(sampleSize+margin));	
+		for(int i = 0; i < sampleSize; i++)
 		{	
-			
-			System.out.println((int)Math.pow(step,i) + " -> " + (int)Math.pow(step,i+1));
-			this.amplitudes[i] = data.getFromTo((int)Math.pow(step,i), (int)Math.pow(step,i+1));
-			
-			lastCut = (int)Math.pow(step,i+1);
+			/** TODO FILTER TOO SHORT WINDOW **/
+			System.out.println((int)Math.pow(step,i+margin) + " -> " + (int)Math.pow(step,i+margin+1));
+			this.amplitudes[i] = data.getFromTo((int)Math.pow(step,i+margin), (int)Math.pow(step,i+margin+1));
 		}
 		
-		this.amplitudes[this.amplitudes.length-1] = data.getFromTo(lastCut, 22000);
-		
+		/*
 		for(int i = 0; i < this.amplitudes.length; i++)
 		{
 			System.out.print(this.amplitudes[i] + " ");
@@ -57,6 +56,8 @@ public class NVoicesSample {
 		this.amplitudes = amplitudes.clone();
 		sampleSize = this.amplitudes.length;
 	}
+	
+	public int getSampleSize() {return sampleSize;}
 	
 	public double getGlobalAmp()
 	{

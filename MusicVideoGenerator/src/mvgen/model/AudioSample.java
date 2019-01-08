@@ -32,33 +32,24 @@ public class AudioSample {
         if(rawFFT == null)return 0;
 
         int indexToStart = (int) Math.floor(fmin / DSF);
-        int indexToEnd = (int) Math.ceil(fmax / DSF);
+        int indexToEnd = (int)Math.ceil(fmax / DSF); // TODO Ceil returns 0 NOT NORMAL
 
         if((indexToStart > rawFFT.length) || (indexToEnd > rawFFT.length))
         {
-        	return 0;        	
+        	System.err.println("FFT fail");
+        	return -1;        	
         }
-
+        
         for(int i = indexToStart; i < indexToEnd; ++i)
         {
             amplitude +=  rawFFT[i];
         }
 
+        System.out.println(fmin + " - " + fmax + " : indexToStart : " + indexToStart + " indexToEnd " + indexToEnd + " returns " + amplitude/(indexToEnd-indexToStart));
+        
         return amplitude/(indexToEnd-indexToStart);
     }
-	/*
-	public double getFromTo(int fmin, int fmax)
-	{
-		double amplitude = 0;
-
-		for(int i = fmin; i < fmax; i+=DSF)
-		{
-			amplitude += getBand(i) / ((fmax - fmin) / DSF);
-		}
-
-		return amplitude;
-	}
-	*/
+	
 	public double getBass() // 0 -> 500Hz
 	{
 		return getFromTo(50,500);

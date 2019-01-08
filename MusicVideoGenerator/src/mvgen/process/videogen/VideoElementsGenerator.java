@@ -43,7 +43,7 @@ public class VideoElementsGenerator extends VideoGenerator {
 			return;
 		}
 
-		ArrayList<NVoicesSample> dataSamples = NVoicesSample.getSamples(samples,3);		
+		ArrayList<NVoicesSample> dataSamples = NVoicesSample.getSamples(samples,20);		
 		NVoicesSample.normalizeData(dataSamples);
 		NVoicesSample.liftData(dataSamples);
 
@@ -64,7 +64,7 @@ public class VideoElementsGenerator extends VideoGenerator {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, imageSize.width, imageSize.height);
 
-		double[] amplitude = new double[10];
+		double[] amplitude = new double[sample.getSampleSize()];
 		
 		for(int i = 0; i < amplitude.length; i++)
 		{
@@ -85,9 +85,10 @@ public class VideoElementsGenerator extends VideoGenerator {
 		g.drawImage(ship, new AffineTransformOp(new AffineTransform(shipModifier,0f,0f,shipModifier,0,0),null), (int)(imageSize.width - ship.getWidth()*shipModifier)/2, (int)(imageSize.height - ship.getHeight()*shipModifier)/2);
 
 		g.setColor(Color.ORANGE);
+		int bandLenght = (int)(imageSize.getWidth() / amplitude.length);
 		for(int i = 0; i < amplitude.length; i++)
 		{
-			g.fillRect(50*i, 0, 50, (int) (amplitude[i] * 500));
+			g.fillRect(bandLenght*i, 0, bandLenght, 50 + (int) (amplitude[i] * 800.0));
 		}
 		
 		
