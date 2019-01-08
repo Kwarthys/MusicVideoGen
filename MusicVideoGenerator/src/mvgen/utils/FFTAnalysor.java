@@ -32,7 +32,7 @@ public class FFTAnalysor {
 	protected double[] signalFFT = null;
 	protected DoubleFFT_1D fftMaker;
 	
-	public static final int DSF = 50;
+	public static final int DSF = 25;
 
 	public void doFFT(double[] samples)
 	{

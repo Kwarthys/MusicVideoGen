@@ -26,6 +26,28 @@ public class AudioSample {
 	}
 	
 	public double getFromTo(int fmin, int fmax)
+    {
+        double amplitude = 0;
+
+        if(rawFFT == null)return 0;
+
+        int indexToStart = (int) Math.floor(fmin / DSF);
+        int indexToEnd = (int) Math.ceil(fmax / DSF);
+
+        if((indexToStart > rawFFT.length) || (indexToEnd > rawFFT.length))
+        {
+        	return 0;        	
+        }
+
+        for(int i = indexToStart; i < indexToEnd; ++i)
+        {
+            amplitude +=  rawFFT[i];
+        }
+
+        return amplitude/(indexToEnd-indexToStart);
+    }
+	/*
+	public double getFromTo(int fmin, int fmax)
 	{
 		double amplitude = 0;
 
@@ -36,7 +58,7 @@ public class AudioSample {
 
 		return amplitude;
 	}
-	
+	*/
 	public double getBass() // 0 -> 500Hz
 	{
 		return getFromTo(50,500);

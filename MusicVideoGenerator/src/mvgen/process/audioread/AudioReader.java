@@ -12,50 +12,80 @@ public class AudioReader {
 
 	ArrayList<Double> allSamples = new ArrayList<>();
 	ArrayList<Double> data = new ArrayList<>();
-	
+
 	int FRAME_RATE = 50;
-	
+
+	private static double[] window = buildFrame(882 * 2);
+
+	private static double[] buildFrame(int size)
+	{
+		double[] window = new double[size];
+		
+		for (int i = 0; i<size/4; ++i)
+		{
+			window[i] = i*(4/size);
+			window[size-1-i] = i*(4/size); 
+		}
+
+		for (int i=size/4; i<size/2; ++i)
+		{
+			window[i] = 1;
+			window[size-1-i] = 1; 
+		}
+		
+		return window;
+	}
+
 	public List<AudioSample> getAmplitudesFreqFromAudio(File file)
 	{		
 		ArrayList<AudioSample> data = new ArrayList<>();
 
 		try {
 			FFTAnalysor fftMaker = new FFTAnalysor();
-			
+
 			WaveFile wav = new WaveFile(file);
 
 			System.out.println(wav.getSampleRate());
-			
+
 			int Fe = 882;
 
-			int frameIndex = 0;
-			
-			double[] samples = new double[Fe];
-			
+			int frameIndexA = Fe;
+			int frameIndexB = 0;
+			double[] samplesA = new double[2*Fe];
+			double[] samplesB = new double[2*Fe];
+
 			System.out.println("Starting music file Read...");
 
 			while(wav.isReadable())
 			{
 				double[] array = wav.getAmplitudeArray();
 
-				for(int i = 0; i < array.length; i++)
+				for(int i = 0; i < array.length; ++i)
 				{			
-					if(frameIndex == Fe)
+					if(frameIndexA == 2*Fe)
 					{
-						frameIndex = 0;
-						fftMaker.doFFT(samples);
-						
+						frameIndexA = 0;
+						fftMaker.doFFT(samplesA);
+
 						data.add(new AudioSample(fftMaker.getFullFtt()));
-						
-						samples = new double[Fe];
-						
-					}
-					else
+
+						samplesA = new double[2*Fe];						
+					}			
+					if(frameIndexB == 2*Fe)
 					{
-						samples[frameIndex] = array[i];
+						frameIndexB = 0;
+						fftMaker.doFFT(samplesB);
+
+						data.add(new AudioSample(fftMaker.getFullFtt()));
+
+						samplesB = new double[2*Fe];						
 					}
-					
-					frameIndex++;
+
+					samplesA[frameIndexA] = array[i] * window[frameIndexA];
+					samplesB[frameIndexB] = array[i] * window[frameIndexB];					
+
+					++frameIndexA;
+					++frameIndexB;
 				}				
 			}
 
@@ -64,9 +94,9 @@ public class AudioReader {
 			e.printStackTrace();
 			return null;
 		}
-		
+
 		System.out.println("Music read");
-		
+
 		return data;
 	}
 
@@ -80,13 +110,13 @@ public class AudioReader {
 			WaveFile wav = new WaveFile(file);
 
 			System.out.println(wav.getSampleRate());
-			
+
 			boolean first = true;
-			
+
 			double localMax = Double.MIN_VALUE;
-			
+
 			int frameIndex = 0;
-			
+
 			while(wav.isReadable())
 			{
 				double[] array = wav.getAmplitudeArray();
@@ -115,15 +145,15 @@ public class AudioReader {
 						data.add(array[i]);
 						first = false;
 					}
-					
+
 					frameIndex ++;
 
 					allSamples.add(array[i]);
 				}				
 			}
-			
+
 			return data;
-			
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

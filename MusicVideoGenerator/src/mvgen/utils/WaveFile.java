@@ -26,7 +26,7 @@ public class WaveFile {
     private AudioFormat format;
     
     private byte[] buffer;
-    private final int CHUNKSIZE = 1024;
+    private final int CHUNKSIZE = 4096;
 
     private Clip clip;
     private boolean canPlay;
