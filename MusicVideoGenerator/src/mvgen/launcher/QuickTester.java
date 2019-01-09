@@ -23,8 +23,18 @@ public class QuickTester {
 	
 	public void tryOneLightninh()
 	{
-		BufferedImage img = new BufferedImage(1000, 1000, BufferedImage.TYPE_3BYTE_BGR);
-		LightningGenerator.drawMeALightning(img, new Point(0,0), new Point(500,500));
-		d.repaintWith(img);
+		for(int i = 0; i < 8; i--)
+		{
+			BufferedImage img = new BufferedImage(1000, 1000, BufferedImage.TYPE_3BYTE_BGR);
+			new LightningGenerator().drawMeALightning(img, new Point(50,10), new Point(500,500), 4);
+			d.repaintWith(img);
+			
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 }
