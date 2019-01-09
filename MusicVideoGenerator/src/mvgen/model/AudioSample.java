@@ -32,7 +32,13 @@ public class AudioSample {
         if(rawFFT == null)return 0;
 
         int indexToStart = (int) Math.floor(fmin / DSF);
-        int indexToEnd = (int)Math.ceil(fmax / DSF); // TODO Ceil returns 0 NOT NORMAL
+        int indexToEnd = (int)Math.ceil(fmax / DSF);
+        
+        if(indexToStart == indexToEnd)
+        {
+        	System.err.println("Too narrow band, extending...");
+        	++indexToEnd;
+        }
 
         if((indexToStart > rawFFT.length) || (indexToEnd > rawFFT.length))
         {
@@ -45,7 +51,7 @@ public class AudioSample {
             amplitude +=  rawFFT[i];
         }
 
-        System.out.println(fmin + " - " + fmax + " : indexToStart : " + indexToStart + " indexToEnd " + indexToEnd + " returns " + amplitude/(indexToEnd-indexToStart));
+        //System.out.println(fmin + " - " + fmax + " : indexToStart : " + indexToStart + " indexToEnd " + indexToEnd + " returns " + amplitude/(indexToEnd-indexToStart));
         
         return amplitude/(indexToEnd-indexToStart);
     }

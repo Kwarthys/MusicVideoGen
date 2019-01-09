@@ -42,10 +42,14 @@ public class VideoElementsGenerator extends VideoGenerator {
 			System.err.println("No ship, returning to port.");
 			return;
 		}
+		
+		int askedBandNumber = 200;
 
-		ArrayList<NVoicesSample> dataSamples = NVoicesSample.getSamples(samples,20);		
+		ArrayList<NVoicesSample> dataSamples = NVoicesSample.getSamples(samples,askedBandNumber);		
 		NVoicesSample.normalizeData(dataSamples);
 		NVoicesSample.liftData(dataSamples);
+		
+		System.out.println(askedBandNumber + " bands asked, " + dataSamples.get(0).getSampleSize() + " given.");
 
 		for(int i = 0; i < dataSamples.size(); i++)
 		{
@@ -88,7 +92,7 @@ public class VideoElementsGenerator extends VideoGenerator {
 		int bandLenght = (int)(imageSize.getWidth() / amplitude.length);
 		for(int i = 0; i < amplitude.length; i++)
 		{
-			g.fillRect(bandLenght*i, 0, bandLenght, 50 + (int) (amplitude[i] * 800.0));
+			g.fillRect(bandLenght*i, 0, bandLenght, 5 + (int) (amplitude[i] * 800.0));
 		}
 		
 		

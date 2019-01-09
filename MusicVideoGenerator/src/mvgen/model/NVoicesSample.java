@@ -3,6 +3,8 @@ package mvgen.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import mvgen.utils.FFTAnalysor;
+
 public class NVoicesSample {
 
 	protected int sampleSize;
@@ -26,29 +28,43 @@ public class NVoicesSample {
 		return amplitudes;
 	}
 
-	/** THIS IS TEMPORARY, I DO NOT MASTER THE MATHS BEHIND THAT BLACK AUDIO MAGIC AND REQUIRE A WIZZARD **/
 	public NVoicesSample(AudioSample data, int size)
 	{
-		this.amplitudes = new double[size];
+		double[] tempAmplitudes = new double[size];
 		this.sampleSize = size;
 		
 		int margin = 4;
 		
+		ArrayList<Integer> bandToIgnore = new ArrayList<>();
+		
 		double step = Math.pow(22000.0, 1.0/(sampleSize+margin));	
 		for(int i = 0; i < sampleSize; i++)
-		{	
-			/** TODO FILTER TOO SHORT WINDOW **/
-			System.out.println((int)Math.pow(step,i+margin) + " -> " + (int)Math.pow(step,i+margin+1));
-			this.amplitudes[i] = data.getFromTo((int)Math.pow(step,i+margin), (int)Math.pow(step,i+margin+1));
+		{
+			int lowerFreq = (int)Math.pow(step,i+margin);
+			int higherFreq = (int)Math.pow(step,i+1+margin);
+			
+			int[] predictedActualBand = { (int)(lowerFreq/FFTAnalysor.DSF), (int)(higherFreq / FFTAnalysor.DSF) };
+			
+			if(predictedActualBand[0] == predictedActualBand[1])
+			{
+				bandToIgnore.add(new Integer(i));
+			}
+			else
+			{
+				//System.out.println(lowerFreq + " -> " + higherFreq);
+				tempAmplitudes[i] = data.getFromTo(lowerFreq, higherFreq);
+			}
 		}
 		
-		/*
-		for(int i = 0; i < this.amplitudes.length; i++)
+		this.sampleSize -=  bandToIgnore.size();
+		this.amplitudes = new double[this.sampleSize];
+		for(int i = 0, c = 0; i < size; ++i)
 		{
-			System.out.print(this.amplitudes[i] + " ");
+			if(!bandToIgnore.contains(i))
+			{
+				this.amplitudes[c++] = tempAmplitudes[i];
+			}
 		}
-		System.out.println();
-		*/
 	}
 
 	public NVoicesSample(double[] amplitudes)
