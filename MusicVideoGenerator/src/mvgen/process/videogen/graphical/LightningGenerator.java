@@ -2,6 +2,7 @@ package mvgen.process.videogen.graphical;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
@@ -16,14 +17,15 @@ public class LightningGenerator {
 	
 	private ArrayList<Point[]> movePoints = new ArrayList<>();
 	
-	public void drawMeALightning(BufferedImage toAlter, Point start, Point end, int iterations)
-	{
+	public BufferedImage drawMeALightning(Dimension imageSize, Point start, Point end, int iterations)
+	{		
+		BufferedImage image = new BufferedImage(imageSize.width, imageSize.height, BufferedImage.TYPE_4BYTE_ABGR);
+		
 		this.maxIterations = iterations;
 		buildModel(start, end);
-		Graphics2D g = (Graphics2D) toAlter.getGraphics();
-		g.setColor(Color.RED);
-		g.fillOval(start.x-10, start.y-10, 20, 20);
-		g.fillOval(end.x-10, end.y-10, 20, 20);
+		Graphics2D g = (Graphics2D) image.getGraphics();
+		g.setColor(new Color(0, 0, 0, 0));
+		g.fillRect(0, 0, image.getWidth(), image.getHeight());
 		g.setColor(Color.WHITE);
 		for(Line l : lines)
 		{
@@ -31,7 +33,7 @@ public class LightningGenerator {
 			g.drawLine(l.start.x, l.start.y, l.end.x, l.end.y);
 		}
 		
-		/*
+		/* DEBUG
 		for(int i = 0; i < movePoints.size(); i++)
 		{
 			Point[] move = movePoints.get(i);
@@ -42,12 +44,15 @@ public class LightningGenerator {
 			g.drawString(String.valueOf(i), move[0].x, move[0].y);
 		}
 		*/
+		
+		return image;
 	}
 	
 	private void buildModel(Point start, Point end)
 	{
 		lines = new ArrayList<>();
 		lines.add(new Line(start, end, 0));
+		iterations = 0;
 		iterateModel();
 	}
 	
@@ -55,7 +60,6 @@ public class LightningGenerator {
 	{
 		if(iterations >= maxIterations)
 		{
-			System.out.println("Lightning done");
 			return;
 		}
 		
@@ -73,8 +77,7 @@ public class LightningGenerator {
 			
 			lineToBreak.setEndPoint(movedPoint);
 			
-			Point[] tmp = {new Point(middle), new Point(movedPoint)};
-			
+			Point[] tmp = {new Point(middle), new Point(movedPoint)}; //DEBUG			
 			movePoints.add(tmp);
 			
 			i+=2;
@@ -94,7 +97,7 @@ public class LightningGenerator {
 		int randDist = (int)(Math.random() * 2 / 3 * maxDistance + maxDistance / 3);
 		int angle = (int)(Math.random() * 360.0);
 		
-		System.out.println(randDist + " " + angle + " " + start.x + ":" + start.y);
+		//System.out.println(randDist + "/" + angle + " " + start.x + ":" + start.y);
 		
 		return getThePointThere(start, randDist, angle);
 	}

@@ -1,5 +1,6 @@
 package mvgen.launcher;
 
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 
@@ -23,10 +24,11 @@ public class QuickTester {
 	
 	public void tryOneLightninh()
 	{
-		for(int i = 0; i < 8; i--)
+		LightningGenerator lg = new LightningGenerator();
+		
+		for(int i = 0; i < 1000; i++)
 		{
-			BufferedImage img = new BufferedImage(1000, 1000, BufferedImage.TYPE_3BYTE_BGR);
-			new LightningGenerator().drawMeALightning(img, new Point(50,10), new Point(500,500), 4);
+			BufferedImage img = lg.drawMeALightning(new Dimension(1000,1000), new Point(50,10), new Point(500,500), 4);
 			d.repaintWith(img);
 			
 			try {

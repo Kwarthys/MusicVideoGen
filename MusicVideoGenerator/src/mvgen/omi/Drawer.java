@@ -1,5 +1,6 @@
 package mvgen.omi;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -20,7 +21,11 @@ public class Drawer extends JPanel{
 	@Override
 	protected void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D)g;
-		
-		g2d.drawImage(img, null, 0, 0);
+		g2d.setColor(Color.BLACK);
+		if(img != null)
+		{
+			g2d.fillRect(0, 0, img.getWidth(), img.getHeight());
+			g2d.drawImage(img, null, 0, 0);
+		}
 	}
 }
