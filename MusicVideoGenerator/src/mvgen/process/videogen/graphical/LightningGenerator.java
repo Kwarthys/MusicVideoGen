@@ -8,6 +8,8 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import mvgen.utils.GeometryMaths;
+
 public class LightningGenerator {
 
 	private ArrayList<Line> lines = new ArrayList<>();
@@ -71,7 +73,7 @@ public class LightningGenerator {
 			Line lineToBreak = this.lines.get(i);
 			Point middle = new Point((lineToBreak.end.x*2 + lineToBreak.start.x)/3, (lineToBreak.end.y*2 + lineToBreak.start.y)/3);
 			
-			Point movedPoint = getARandomPointAround(middle, lineToBreak.getLenght()/4);
+			Point movedPoint = GeometryMaths.getARandomPointAround(middle, lineToBreak.getLenght()/4);
 			
 			this.lines.add(i+1, new Line(movedPoint, lineToBreak.end, lineToBreak.index));
 			
@@ -83,31 +85,13 @@ public class LightningGenerator {
 			i+=2;
 			
 			/*** Create a new line ***/
-			this.lines.add(new Line(movedPoint, getARandomPointAround(movedPoint, lineToBreak.getLenght()/2), lineToBreak.index+1));
+			this.lines.add(new Line(movedPoint, GeometryMaths.getARandomPointAround(movedPoint, lineToBreak.getLenght()/2), lineToBreak.index+1));
 			++added;
 		}
 		
 		++iterations;
 		iterateModel();
 		
-	}
-	
-	public Point getARandomPointAround(Point start, double maxDistance)
-	{
-		int randDist = (int)(Math.random() * 2 / 3 * maxDistance + maxDistance / 3);
-		int angle = (int)(Math.random() * 360.0);
-		
-		//System.out.println(randDist + "/" + angle + " " + start.x + ":" + start.y);
-		
-		return getThePointThere(start, randDist, angle);
-	}
-	
-	public Point getThePointThere(Point start, int distance, int angleInDegrees)
-	{
-		int newX = (int)(start.getX() + distance * Math.cos(angleInDegrees * Math.PI / 180));
-		int newY = (int)(start.getY() + distance * Math.sin(angleInDegrees * Math.PI / 180));
-		
-		return new Point(newX, newY);
 	}
 	
 	
