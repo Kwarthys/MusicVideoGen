@@ -17,9 +17,9 @@ public class Launcher {
 
 		//File file = new File("deathsound.wav");
 		//File file = new File("HeavyFire.wav");
-		File file = new File("Bambino.wav");
+		//File file = new File("Bambino.wav");
 		//File file = new File("test.wav");
-		//File file = new File("RockingHells.wav");	
+		File file = new File("RockingHells.wav");	
 
 		//List<Double> samples = new AudioReader().getAmplitudeFromAudio();
 		List<AudioSample> samples = new AudioReader().getAmplitudesFreqFromAudio(file);
@@ -34,5 +34,4 @@ public class Launcher {
 		
 		//new QuickTester();
 	}
-
 }

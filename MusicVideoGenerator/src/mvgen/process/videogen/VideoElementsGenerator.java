@@ -105,7 +105,7 @@ public class VideoElementsGenerator extends VideoGenerator {
 		}
 		
 
-		if(getMeanFromTo(amplitude.length*9/10, amplitude.length-1, amplitude) > 0.3)
+		if(getMeanFromTo(amplitude.length*9/10, amplitude.length-1, amplitude) > 0.5)
 		{
 			if(lightning == null)
 			{
