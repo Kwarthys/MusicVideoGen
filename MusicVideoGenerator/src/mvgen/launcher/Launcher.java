@@ -1,6 +1,7 @@
 package mvgen.launcher;
 
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 
 import mvgen.model.AudioSample;
@@ -27,8 +28,9 @@ public class Launcher {
 		//new VideoGenWavesAndCircle().generateVideo(samples);
 		//new VideoGenPlanetary().generateVideo(samples);
 		
-		
+		long date = new Date().getTime();
 		new VideoElementsGenerator().generateVideo(samples);
+		System.out.println("Generation took : " + (new Date().getTime() - date)/1000.0 + "s.");
 		
 		//new QuickTester();
 	}

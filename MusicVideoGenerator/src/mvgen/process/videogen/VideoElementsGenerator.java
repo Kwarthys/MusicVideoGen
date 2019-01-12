@@ -26,6 +26,8 @@ public class VideoElementsGenerator extends VideoGenerator {
 	private BufferedImage lightning = null;
 	
 	private int counter = 0;
+	
+	private static final int lightningDuration = 5;
 
 	@Override
 	public void generateVideo(List<AudioSample> samples) {
@@ -102,21 +104,21 @@ public class VideoElementsGenerator extends VideoGenerator {
 			g.fillRect(bandLenght*i, 0, bandLenght, 5 + (int) (amplitude[i] * 800.0));
 		}
 		
-		int animStart = 5;
-		int animEnd = animStart + 5;
-		
-		if(counter >= animStart)
-		{			
-			addTheLightning(g, counter - animStart, roundedShipRadius);
-			
-			if(counter > animEnd)
+
+		if(getMeanFromTo(amplitude.length*9/10, amplitude.length-1, amplitude) > 0.3)
+		{
+			if(lightning == null)
 			{
-				counter = 0;
+				counter = 0;				
+			}
+			
+			addTheLightning(g, counter++, roundedShipRadius);
+			
+			if(counter>lightningDuration)
+			{
 				lightning = null;
 			}
 		}
-		
-		++counter;
 		
 		
 		return frame;
@@ -147,6 +149,18 @@ public class VideoElementsGenerator extends VideoGenerator {
 		g.fillRect(0, 0, imageSize.width, imageSize.height);
 		
 		g.drawImage(lightning, null, 0,0);
+	}
+	
+	private double getMeanFromTo(int indexStart, int indexEnd, double[] array)
+	{
+		double average = 0;
+		
+		for(int i = indexStart; i < indexEnd; ++i)
+		{
+			average += (array[i]);
+		}
+		
+		return average / (indexEnd - indexStart);
 	}
 	
 	private Point getFrameCenter()
